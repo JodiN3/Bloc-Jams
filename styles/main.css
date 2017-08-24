@@ -122,3 +122,11 @@ body.landing {
     left: 2rem;
 >>>>>>> ckpt-7-responsiveness
  }
+
+ .clearfix::after {
+   content: ".";
+   visibility: hidden;
+   display: block;
+   height: 0;
+   clear: both;
+}
