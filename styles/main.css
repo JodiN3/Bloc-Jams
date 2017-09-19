@@ -13,6 +13,7 @@ body {
     font-family: 'Open Sans';
     color: white;
     min-height: 100%;
+    margin: 0;
 }
 
 .navbar {
@@ -22,6 +23,7 @@ body {
     background-color: rgba(101,18,95,0.5);
     /* #2 */
     z-index: 1;
+    overflow: hidden;
 }
 
 .navbar .logo {
@@ -60,6 +62,9 @@ body {
 .links-container .navbar-link:hover {
     color: rgb(233,50,117);
  }
+ .links-container .navbar-link:active {
+     background-color: white;
+  }
 
 .container {
   margin: 0 auto;
