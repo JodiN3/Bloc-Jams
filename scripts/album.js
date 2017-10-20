@@ -45,47 +45,53 @@ var albumMonkees = {
 
 var createSongRow = function(songNumber, songName, songLength) {
     var template =
-        '<tr class="album-view-song-item">'
+      '<tr class="album-view-song-item">'
     + '  <td class="song-item-number" data-song-number="' + songNumber + '">' + songNumber + '</td>'
     + '  <td class="song-item-title">' + songName + '</td>'
     + '  <td class="song-item-duration">' + songLength + '</td>'
     + '</tr>'
     ;
+
     return template;
  };
 
-// Select elements that we want to populate with text dynamically
-var albumTitle = document.getElementsByClassName('album-view-title')[0];
-var albumArtist = document.getElementsByClassName('album-view-artist')[0];
-var albumReleaseInfo = document.getElementsByClassName('album-view-release-info')[0];
-var albumImage = document.getElementsByClassName('album-cover-art')[0];
-var albumSongList = document.getElementsByClassName('album-view-song-list')[0];
-
 var setCurrentAlbum = function(album) {
-      // Assign values to each part of the album (text, images)
-      albumTitle.firstChild.nodeValue = album.title;
-      albumArtist.firstChild.nodeValue = album.artist;
-      albumReleaseInfo.firstChild.nodeValue = album.year + ' ' + album.label;
-      albumImage.setAttribute('src', album.albumArtUrl);
+    // Select elements that we want to populate with text dynamically
+    var albumTitle = document.getElementsByClassName('album-view-title')[0];
+    var albumArtist = document.getElementsByClassName('album-view-artist')[0];
+    var albumReleaseInfo = document.getElementsByClassName('album-view-release-info')[0];
+    var albumImage = document.getElementsByClassName('album-cover-art')[0];
+    var albumSongList = document.getElementsByClassName('album-view-song-list')[0];
 
-      // Clear contents of album song list container
-      albumSongList.innerHTML = '';
+    // Assign values to each part of the album (text, images)
+    albumTitle.firstChild.nodeValue = album.title;
+    albumArtist.firstChild.nodeValue = album.artist;
+    albumReleaseInfo.firstChild.nodeValue = album.year + ' ' + album.label;
+    albumImage.setAttribute('src', album.albumArtUrl);
 
-      // Build list of songs from album JavaScript object
-      for (var i = 0; i < album.songs.length; i++) {
-          albumSongList.innerHTML += createSongRow(i + 1, album.songs[i].title, album.songs[i].duration);
-      }
+    // Clear contents of album song list container
+    albumSongList.innerHTML = '';
+
+    // Build list of songs from album JavaScript object
+    for (i = 0; i < album.songs.length; i++) {
+        albumSongList.innerHTML += createSongRow(i + 1, album.songs[i].title, album.songs[i].length);
+    }
   };
 
+
+
 var findParentByClassName = function(element, targetClass) {
-      if (element) {
-        var currentParent = element.parentElement;
-        while (currentParent.className !== targetClass && currentParent.className !== null) {
-              currentParent = currentParent.parentElement;
-      }
-        return currentParent;
+      var currentParent = element.parentElement;
+
+        while (currentParent.className !== targetClass) {
+            currentParent = currentParent.parentElement;
     }
+    return currentParent;
 };
+
+
+
+
 var getSongItem = function(element) {
     switch (element.className) {
         case 'album-song-button':
@@ -132,14 +138,14 @@ var pauseButtonTemplate = '<a class="album-song-button"><span class="ion-pause">
 var currentlyPlayingSong = null;
 
 window.onload = function() {
+    setCurrentAlbum(albumPicasso);
 
-setCurrentAlbum(albumPicasso);
-
-songListContainer.addEventListener('mouseover', function(event) {
-    if (event.target.parentElement.className === 'album-view-song-item') {
+    songListContainer.addEventListener('mouseover', function(event) {
+      if (event.target.parentElement.className === 'album-view-song-item') {
           var songItem = getSongItem(event.target);
 
           if (songItem.getAttribute('data-song-number') !== currentlyPlayingSong) {
+              songItem.innerHTML = playButtonTemplate;
           }
     }
 });
@@ -153,21 +159,9 @@ songListContainer.addEventListener('mouseover', function(event) {
                 songItem.innerHTML = songItemNumber;
             }
 
-        });
-
-        songRows[i].addEventListener('click', function(event) {
+          });
+          songRows[i].addEventListener('click', function(event) {
              clickHandler(event.target);
          });
     }
-}
-
-    var albums = [albumPicasso, albumMarconi, albumMonkees];
-    var index = 1;
-    albumImage.addEventListener("click", function(event) {
-      setCurrentAlbum(album[index]);
-      index++;
-      if (index == albums.length) {
-          index = 0;
-      }
-    });
   };
