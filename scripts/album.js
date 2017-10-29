@@ -43,12 +43,12 @@ var albumMonkees = {
     ]
 };
 
-var createSongRow = function(songNumber, songName, songLength) {
+var createSongRow = function(songNumber, songName, songDuration) {
     var template =
       '<tr class="album-view-song-item">'
     + '  <td class="song-item-number" data-song-number="' + songNumber + '">' + songNumber + '</td>'
     + '  <td class="song-item-title">' + songName + '</td>'
-    + '  <td class="song-item-duration">' + songLength + '</td>'
+    + '  <td class="song-item-duration">' + songDuration + '</td>'
     + '</tr>'
     ;
 
@@ -74,7 +74,7 @@ var setCurrentAlbum = function(album) {
 
     // Build list of songs from album JavaScript object
     for (i = 0; i < album.songs.length; i++) {
-        albumSongList.innerHTML += createSongRow(i + 1, album.songs[i].title, album.songs[i].length);
+        albumSongList.innerHTML += createSongRow(i + 1, album.songs[i].title, album.songs[i].duration);
     }
   };
 
