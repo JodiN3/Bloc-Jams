@@ -134,10 +134,27 @@ var currentVolume = 80;
 var $previousButton = $('.main-controls .previous');
 var $nextButton = $('.main-controls .next');
 
+// Ckpt 32 Assign: Create a variable to hold selector
+var $mainControlsSelector = $('.main-controls .play-pause');
+var togglePlayFromPlayerBar = function () { // #2 from assignment
+ 	  if (currentlyPlayingSongNumber) {
+ 	  if (currentSoundFile.isPaused()) {
+ 			  getSongNumberCell(currentlyPlayingSongNumber).html(pauseButtonTemplate);
+ 			  $mainControlsSelector.html(playerBarPauseButton);
+ 			  currentSoundFile.play();
+ 		} else {
+ 			getSongNumberCell(currentlyPlayingSongNumber).html(playButtonTemplate);
+ 			$mainControlsSelector.html(playerBarPlayButton);
+ 			currentSoundFile.pause();
+ 		}
+ 	}
+ };
+
 $(document).ready(function() {
   setCurrentAlbum(albumPicasso);
        $previousButton.click(previousSong);
        $nextButton.click(nextSong);
+       $mainControlsSelector.click(togglePlayFromPlayerBar);
    });
 
 var nextSong = function() {
