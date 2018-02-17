@@ -11,6 +11,12 @@ var setSong = function(songNumber) {
     setVolume(currentVolume);
 };
 
+var seek = function(time) {
+     if (currentSoundFile) {
+         currentSoundFile.setTime(time);
+     }
+ };
+
 var setVolume = function(volume) {
     if (currentSoundFile) {
         currentSoundFile.setVolume(volume);
@@ -47,8 +53,15 @@ var clickHandler = function() {
             // Switch from Play -> Pause button to indicate new song is playing.
             setSong(songNumber);
             currentSoundFile.play();
-            $(this).html(pauseButtonTemplate);
+            updateSeekBarWhileSongPlays();
             currentSongFromAlbum = currentAlbum.songs[songNumber - 1];
+
+            var $volumeFill = $('.volume .fill');
+            var $volumeThumb = $('.volume .thumb');
+            $volumeFill.width(currentVolume + '%');
+            $volumeThumb.css({left: currentVolume + '%'});
+
+            $(this).html(pauseButtonTemplate);
             updatePlayerBarSong();
 
       } else if (currentlyPlayingSongNumber === songNumber) {
@@ -107,6 +120,19 @@ var setCurrentAlbum = function(album) {
         $albumSongList.append($newRow);
     }
 };
+
+var updateSeekBarWhileSongPlays = function() {
+     if (currentSoundFile) {
+         // #10
+         currentSoundFile.bind('timeupdate', function(event) {
+             // #11
+             var seekBarFillRatio = this.getTime() / this.getDuration();
+             var $seekBar = $('.seek-control .seek-bar');
+
+             updateSeekPercentage($seekBar, seekBarFillRatio);
+         });
+     }
+ };
 
 var updateSeekPercentage = function($seekBar, seekBarFillRatio) {
     var offsetXPercent = seekBarFillRatio * 100;
@@ -255,4 +281,50 @@ var previousSong = function() {
 
     $previousSongNumberCell.html(pauseButtonTemplate);
     $lastSongNumberCell.html(lastSongNumber);
+};
+
+$seekBars.click(function(event) {
+    var offsetX = event.pageX - $(this).offset().left;
+    var barWidth = $(this).width();
+    var seekBarFillRatio = offsetX / barWidth;
+
+    if ($(this).parent().attr('class') == 'seek-control') {
+        seek(seekBarFillRatio * currentSoundFile.getDuration());
+    } else {
+        setVolume(seekBarFillRatio * 100);
+    }
+
+    updateSeekPercentage($(this), seekBarFillRatio);
+});
+
+$seekBars.find('.thumb').mousedown(function(event) {
+
+    var $seekBar = $(this).parent();
+
+    $(document).bind('mousemove.thumb', function(event){
+        var offsetX = event.pageX - $seekBar.offset().left;
+        var barWidth = $seekBar.width();
+        var seekBarFillRatio = offsetX / barWidth;
+
+        if ($seekBar.parent().attr('class') == 'seek-control') {
+            seek(seekBarFillRatio * currentSoundFile.getDuration());
+        } else {
+            setVolume(seekBarFillRatio);
+        }
+
+        updateSeekPercentage($seekBar, seekBarFillRatio);
+    });
+
+var setCurrentTimeInPlayerBar = function(currentTime) {
+    var $currentTimeElement = $('.seek-control .current-time');
+    $currentTimeElement.text(currentTime);
+};
+
+var setTotalTimeInPlayerBar = function(totalTime) {
+
+};
+
+var filterTimeCode = function(timeInSeconds) {
+
+
 };
