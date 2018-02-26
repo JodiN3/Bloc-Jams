@@ -8,7 +8,7 @@ var createSongRow = function(songNumber, songName, songLength) {
       '<tr class="album-view-song-item">'
     + '  <td class="song-item-number" data-song-number="' + songNumber + '">' + songNumber + '</td>'
     + '  <td class="song-item-title">' + songName + '</td>'
-    + '  <td class="song-item-duration">' + filterTimeCode(songLength) + '</td>'
+    + '  <td class="song-item-duration">' + songLength + '</td>'
     + '</tr>'
     ;
 
@@ -154,7 +154,7 @@ var filterTimeCode = function(timeInSeconds) {
 var updateSeekBarWhileSongPlays = function() {
      if (currentSoundFile) {
          currentSoundFile.bind('timeupdate', function(event) {
-           var currentTime = this.getTime();
+          var currentTime = this.getTime();
           var songLength = this.getDuration();
           var seekBarFillRatio = currentTime / songLength;
           var $seekBar = $('.seek-control .seek-bar');
